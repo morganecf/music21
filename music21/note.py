@@ -192,6 +192,42 @@ class GeneralNote(music21.Music21Object):
         self.editorial = editorial.NoteEditorial()
         self.tie = None # store a Tie object
 
+    def __eq__(self, other):
+        ''' Equality wrt pitch and duration.
+    
+        >>> noteC = Note('C')
+        >>> noteC == None
+        True
+        >>> secondNoteC = Note('C')
+        >>> noteC == secondNoteC
+        True
+        >>> wholeNoteC = WholeNote('C')
+        >>> noteC == wholeNoteC
+        False
+        >>> secondWholeNoteC = WholeNote('C')
+        >>> wholeNoteC == secondWholeNoteC
+        True
+        >>> rest = Rest()
+        >>> noteC == rest
+        False
+        >>> secondRest = Rest()
+        >>> rest == secondRest
+        True
+        '''
+        if other is None or not isinstance(other, GeneralNote):
+            return False
+        if not self.duration == other.duration:
+            return False
+        if self.isChord or other.isChord:
+            return self.isChord and other.isChord and self.pitchClasses == other.pitchClasses
+        if not (self.isUnpitched or other.isUnpitched) and not (self.isRest or other.isRest):
+            return self.pitch == other.pitch
+        # We have two pitchless objects which had equal duration
+        return True
+    
+    def __hash__(self):
+        ''' Returns a hash based on the note's pitch and duration. '''
+        return hash(self.duration.type + (self.isNote and str(self.ps) or ''))
 
     #---------------------------------------------------------------------------
     def _getColor(self):

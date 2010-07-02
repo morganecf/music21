@@ -1551,7 +1551,13 @@ class Duration(DurationCommon):
             self.linkages = keywords["linkages"]
         else:
             self.linkages = []
-        
+
+    def __eq__(self, other):
+        ''' Judges equality of durations by quarter length. '''
+        if other == None or not isinstance(other, Duration):
+            return False
+        return self.quarterLength == other.quarterLength
+
     def __repr__(self):
         '''Provide a representation.
         '''
