@@ -438,9 +438,16 @@ class GenericInterval(music21.Music21Object):
         else:
             self.perfectable = False
         
-        self.niceName = common.musicOrdinals[self.undirected]
-        self.simpleNiceName = common.musicOrdinals[self.simpleUndirected]
-        self.semiSimpleNiceName = common.musicOrdinals[self.semiSimpleUndirected]
+        if self.undirected < 23:
+            self.niceName = common.musicOrdinals[self.undirected]
+            self.simpleNiceName = common.musicOrdinals[self.simpleUndirected]
+            self.semiSimpleNiceName = common.musicOrdinals[self.semiSimpleUndirected]
+        # No idea what should happen here, but in self.undirected is >= 23 an
+        # IndexError gets thrown.
+        else:
+            self.niceName = ''
+            self.simpleNiceName = ''
+            self.semiSimpleNiceName = ''
 
         if self.directed == 1:
             self.staffDistance = 0
