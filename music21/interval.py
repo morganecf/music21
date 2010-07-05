@@ -1134,7 +1134,11 @@ class Interval(music21.Music21Object):
                           interval2.chromatic.semitones)
 
         if halfStepsToFix != 0:
-            pitch2.accidental = halfStepsToFix
+            if abs(halfStepsToFix) > 2:
+                pitch2.pitchClass += halfStepsToFix / 2
+                pitch2.accidental = halfStepsToFix % 2
+            else:
+                pitch2.accidental = halfStepsToFix
             # inherit accidental display properties
             pitch2.inheritDisplay(pitch1)
         return pitch2
